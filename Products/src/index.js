@@ -9,5 +9,5 @@ app.use('/', (req,res,next)=>{
 })
 
 app.listen(5002, ()=>{
-    console.log("Products service is listing on 8002")
+    console.log("Products service is listing on 5002")
 })
