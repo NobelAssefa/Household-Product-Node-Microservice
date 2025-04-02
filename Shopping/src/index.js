@@ -1,13 +1,25 @@
 const express = require('express')
+const {dbConnection} = require('./database')
+const expressApp = require('./express-app')
 
-const app  = express()
+const {PORT} = require('./config')
 
-app.use(express.json())
+const startServer =async ()=>{
+    
+ const app = express()
+ await dbConnection()
 
-app.use('/', (req,res,next)=>{
-    return res.status(200).json({"msg":"it's me from Shopping"})
+ expressApp(app)
+
+ app.listen(PORT, ()=>{
+    console.log(`Shopping Service is listeing on Port ${PORT}`);
+    
+ }).on('error',(err)=>{
+    console.log(err);
+    process.exit();
+    
 })
 
-app.listen(5003, ()=>{
-    console.log("Shopping service is listing on 5003")
-})
+}
+
+startServer()

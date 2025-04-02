@@ -1,14 +1,24 @@
 const express = require('express');
 const { log } = require('winston');
+const expressApp = require('./express-app')
+const {dbConnection} = require('./database');
+const { PORT } = require('./config');
 
-const app = express();
+const startServer = async () =>{
+    const app = express();
+
+    await dbConnection();
+
+    expressApp(app);
+
+    app.listen(PORT, ()=>{
+        console.log(`Customer Service is listing on Port ${PORT}`)
+    })  .on('error', (err) => {
+        console.log(err);
+        process.exit();
+    })
 
 
-app.use(express.json())
+}
 
-app.use('/', (req,res,next)=>{
-    return res.status(200).json({"msg": "It's me from Customers service"})
-})
-app.listen(5001, ()=>{
-    console.log("Customer Service is listing in port 5001")
-})
+startServer()
